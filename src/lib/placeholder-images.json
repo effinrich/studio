@@ -1,3 +1,41 @@
+
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "tenant-1",
+      "description": "Avatar for Liam O'Connor",
+      "imageUrl": "https://picsum.photos/seed/p1/100/100",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "tenant-2",
+      "description": "Avatar for Olivia Chen",
+      "imageUrl": "https://picsum.photos/seed/p2/100/100",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "tenant-3",
+      "description": "Avatar for Benjamin Carter",
+      "imageUrl": "https://picsum.photos/seed/p3/100/100",
+      "imageHint": "man portrait"
+    },
+    {
+      "id": "tenant-4",
+      "description": "Avatar for Sophia Rodriguez",
+      "imageUrl": "https://picsum.photos/seed/p4/100/100",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "tenant-5",
+      "description": "Avatar for Ava Nguyen",
+      "imageUrl": "https://picsum.photos/seed/p5/100/100",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "tenant-6",
+      "description": "Avatar for Noah Williams",
+      "imageUrl": "https://picsum.photos/seed/p6/100/100",
+      "imageHint": "man portrait"
+    }
+  ]
 }

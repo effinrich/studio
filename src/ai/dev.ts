@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/rent-tracker-late-payments.ts';
+import '@/ai/flows/lease-expiration-notification.ts';
