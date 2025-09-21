@@ -11,7 +11,15 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { HighlightLatePaymentInputSchema, highlightLatePayment, type HighlightLatePaymentInput } from './rent-tracker-late-payments';
+import { highlightLatePayment, type HighlightLatePaymentInput } from './rent-tracker-late-payments';
+
+export const HighlightLatePaymentInputSchema = z.object({
+  paymentDueDate: z.string().describe('The due date of the rent payment (ISO format).'),
+  paymentDate: z.string().nullable().describe('The date the rent was paid (ISO format), null if not paid.'),
+  rentAmount: z.number().describe('The amount of rent due.'),
+  tenantName: z.string().describe('The name of the tenant.'),
+  propertyName: z.string().describe('The name of the property.'),
+});
 
 const HighlightLatePaymentBatchResultSchema = z.object({
   isLate: z.boolean().describe('Whether the rent payment is late.'),
@@ -40,7 +48,7 @@ const highlightLatePaymentsBatchFlow = ai.defineFlow(
   },
   async (payments) => {
     const results = await Promise.all(
-      payments.map((payment) => highlightLatePayment(payment))
+      payments.map((payment) => highlightLatePayment(payment as HighlightLatePaymentInput))
     );
     return { results };
   }

@@ -20,7 +20,13 @@ export default async function RentTrackerPage() {
     };
   });
   
-  const latePaymentInfo = await highlightLatePaymentsBatch(paymentsWithTenantAndProperty as (Payment & {tenantName: string, propertyName: string})[]);
+  const latePaymentInfo = await highlightLatePaymentsBatch(paymentsWithTenantAndProperty.map(p => ({
+    paymentDueDate: p.dueDate,
+    paymentDate: p.paidDate,
+    rentAmount: p.amount,
+    tenantName: p.tenantName,
+    propertyName: p.propertyName,
+  })));
 
   const enrichedPayments = paymentsWithTenantAndProperty.map((payment, index) => {
     return {
