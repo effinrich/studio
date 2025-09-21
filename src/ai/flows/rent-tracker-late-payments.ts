@@ -59,8 +59,8 @@ const highlightLatePaymentFlow = ai.defineFlow(
     let daysLate: number | undefined = undefined;
 
     if (!input.paymentDate) {
-      isLate = dueDate < now;
-      if (isLate) {
+      if (dueDate < now) {
+        isLate = true;
         daysLate = Math.floor(
           (now.getTime() - dueDate.getTime()) / (1000 * 3600 * 24)
         );
