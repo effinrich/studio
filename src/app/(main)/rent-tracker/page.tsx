@@ -14,17 +14,20 @@ export default async function RentTrackerPage() {
     const isLate = !payment.paidDate && differenceInDays(new Date(), parseISO(payment.dueDate)) > 0;
     const daysLate = isLate ? differenceInDays(new Date(), parseISO(payment.dueDate)) : 0;
 
+    // This logic is now handled directly in the component
+    const latePaymentInfo = {
+      isLate,
+      daysLate,
+      suggestReminder: isLate,
+      reason: isLate ? `Overdue by ${daysLate} days.` : 'On time',
+    };
+
     return {
       ...payment,
       tenantName: tenant?.name || 'N/A',
       avatarUrl: tenant?.avatarUrl || '',
       propertyName: property?.name || 'N/A',
-      latePaymentInfo: {
-        isLate,
-        daysLate,
-        suggestReminder: isLate,
-        reason: isLate ? 'Payment is overdue.' : 'Payment is on time.',
-      },
+      latePaymentInfo,
     };
   });
 
