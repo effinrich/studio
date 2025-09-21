@@ -11,17 +11,16 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import type { HighlightLatePaymentsBatchInput } from './rent-tracker-late-payments-batch';
 
-export type HighlightLatePaymentInput = HighlightLatePaymentsBatchInput[0];
-
-const HighlightLatePaymentInputSchema = z.object({
+export const HighlightLatePaymentInputSchema = z.object({
   paymentDueDate: z.string().describe('The due date of the rent payment (ISO format).'),
   paymentDate: z.string().nullable().describe('The date the rent was paid (ISO format), null if not paid.'),
   rentAmount: z.number().describe('The amount of rent due.'),
   tenantName: z.string().describe('The name of the tenant.'),
   propertyName: z.string().describe('The name of the property.'),
 });
+export type HighlightLatePaymentInput = z.infer<typeof HighlightLatePaymentInputSchema>;
+
 
 const HighlightLatePaymentOutputSchema = z.object({
   isLate: z.boolean().describe('Whether the rent payment is late.'),
