@@ -81,11 +81,19 @@ const highlightLatePaymentFlow = ai.defineFlow(
       }
     }
 
+    if (!isLate) {
+      return {
+        isLate: false,
+        suggestReminder: false,
+        reason: 'Payment is not late.',
+      };
+    }
+
     const {
       output,
     } = await highlightLatePaymentPrompt({
       ...input,
     });
-    return output!;
+    return {...output!, isLate, daysLate};
   }
 );
