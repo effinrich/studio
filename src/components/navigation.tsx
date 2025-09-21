@@ -1,3 +1,4 @@
+
 'use client';
 
 import { usePathname } from 'next/navigation';
@@ -20,6 +21,7 @@ import {
 const links = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/tenants', label: 'Tenants', icon: Users },
+  { href: '/properties', label: 'Properties', icon: Building2 },
   { href: '/rent-tracker', label: 'Rent Tracker', icon: CreditCard },
   { href: '/issues', label: 'Issues', icon: Wrench },
   { href: '/documents', label: 'Documents', icon: FileText },
