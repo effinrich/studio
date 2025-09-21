@@ -1,38 +1,31 @@
 import { getPayments, getTenants, getProperties } from '@/lib/data';
 import { RentTrackerTable } from './_components/rent-tracker-table';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { highlightLatePaymentsBatch } from '@/ai/flows/rent-tracker-late-payments-batch';
-import type { Payment } from '@/lib/types';
+import { differenceInDays, parseISO } from 'date-fns';
 
 export default async function RentTrackerPage() {
   const payments = await getPayments();
   const tenants = await getTenants();
   const properties = await getProperties();
 
-  const paymentsWithTenantAndProperty = payments.map(payment => {
+  const enrichedPayments = payments.map(payment => {
     const tenant = tenants.find(t => t.id === payment.tenantId);
     const property = properties.find(p => p.id === payment.propertyId);
+    const isLate = !payment.paidDate && differenceInDays(new Date(), parseISO(payment.dueDate)) > 0;
+    const daysLate = isLate ? differenceInDays(new Date(), parseISO(payment.dueDate)) : 0;
+
     return {
       ...payment,
       tenantName: tenant?.name || 'N/A',
       avatarUrl: tenant?.avatarUrl || '',
       propertyName: property?.name || 'N/A',
+      latePaymentInfo: {
+        isLate,
+        daysLate,
+        suggestReminder: isLate,
+        reason: isLate ? 'Payment is overdue.' : 'Payment is on time.',
+      },
     };
-  });
-  
-  const latePaymentInfo = await highlightLatePaymentsBatch(paymentsWithTenantAndProperty.map(p => ({
-    paymentDueDate: p.dueDate,
-    paymentDate: p.paidDate,
-    rentAmount: p.amount,
-    tenantName: p.tenantName,
-    propertyName: p.propertyName,
-  })));
-
-  const enrichedPayments = paymentsWithTenantAndProperty.map((payment, index) => {
-    return {
-      ...payment,
-      latePaymentInfo: latePaymentInfo.results[index],
-    }
   });
 
   return (
