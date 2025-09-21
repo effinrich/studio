@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { HighlightLatePaymentInput, highlightLatePayment } from './rent-tracker-late-payments';
+import { HighlightLatePaymentInputSchema, highlightLatePayment } from './rent-tracker-late-payments';
 
 const HighlightLatePaymentBatchResultSchema = z.object({
   isLate: z.boolean().describe('Whether the rent payment is late.'),
@@ -20,7 +20,7 @@ const HighlightLatePaymentBatchResultSchema = z.object({
   reason: z.string().describe('The reason for the suggestion.'),
 });
 
-const HighlightLatePaymentsBatchInputSchema = z.array(HighlightLatePaymentInput);
+const HighlightLatePaymentsBatchInputSchema = z.array(HighlightLatePaymentInputSchema);
 export type HighlightLatePaymentsBatchInput = z.infer<typeof HighlightLatePaymentsBatchInputSchema>;
 
 const HighlightLatePaymentsBatchOutputSchema = z.object({

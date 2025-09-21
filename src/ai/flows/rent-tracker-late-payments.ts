@@ -12,7 +12,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const HighlightLatePaymentInputSchema = z.object({
+export const HighlightLatePaymentInputSchema = z.object({
   paymentDueDate: z.string().describe('The due date of the rent payment (ISO format).'),
   paymentDate: z.string().nullable().describe('The date the rent was paid (ISO format), null if not paid.'),
   rentAmount: z.number().describe('The amount of rent due.'),
