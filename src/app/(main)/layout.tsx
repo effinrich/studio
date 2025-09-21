@@ -1,7 +1,9 @@
+
+'use client';
+
 import Link from "next/link";
 import {
   Bell,
-  Home,
   Search,
   Building2
 } from "lucide-react";
@@ -27,12 +29,63 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Navigation } from "@/components/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  if (loading || !user) {
+    return (
+        <div className="flex min-h-screen w-full">
+            <div className="hidden md:flex flex-col w-64 border-r">
+                <div className="p-4">
+                    <Skeleton className="h-10 w-full" />
+                </div>
+                <div className="p-4 space-y-2">
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="h-8 w-full" />
+                </div>
+            </div>
+            <div className="flex-1">
+                <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card/80 px-4 backdrop-blur-sm md:px-6 justify-end">
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                </header>
+                <main className="p-4 md:p-6">
+                    <Skeleton className="h-96 w-full" />
+                </main>
+            </div>
+        </div>
+    )
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -72,8 +125,8 @@ export default function MainLayout({
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="https://picsum.photos/seed/admin/100/100" alt="@shadcn" data-ai-hint="man portrait"/>
-                      <AvatarFallback>AD</AvatarFallback>
+                      <AvatarImage src={user.photoURL || "https://picsum.photos/seed/admin/100/100"} alt={user.displayName || user.email || 'user'} data-ai-hint="man portrait"/>
+                      <AvatarFallback>{user.email ? user.email.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -85,7 +138,7 @@ export default function MainLayout({
                   <DropdownMenuSeparator />
                   <ThemeToggle />
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
